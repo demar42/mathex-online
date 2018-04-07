@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="/static/js/jquery-3.1.1.min.js"></script>
+    <script src="/static/js/socket.io.slim.js"></script>
+
+    <title>Mathex Test - With Bootstrap</title>
+    <style>
+        html, body {
+            height: 100%;
+            background-color: #efe9e7;
+        }
+        .navbar {
+            position: fixed;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function() {
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+            $('#submit-answer').click(function() {
+                socket.emit("answer", $('#answer').val());
+
+                socket.on("resp", function(data) {
+                    if (data) {
+                        $('#result').text("Correct!")
+                    } else {
+                        $('#result').text("Incorrect")
+                    }
+                    socket.removeAllListeners("res");
+                });
+
+            });
+        });
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm w-100" style="background-color: white;">
+        45 points - 2nd place
+    </nav>
+    <div class="container d-flex h-100">
+        <div class="align-self-center mx-auto p-4 h-25" style="width: 700px; min-height: 300px;" id="main_container">
+            <div class="row h-75">
+                <div class="col">
+                    <h2>Question 1</h2>
+                    <p class="h-100">Beethoven's Symphony Number 9 takes 72 minutes to be played by 60 musicians. How long will it take 30 musicians to play the Symphony?</p>
+                </div>
+                <div class="col-auto">
+                    
+                </div>
+            </div>
+            <div class="row h-25">
+                <div class="input-group col-sm-10 align-self-center">
+                    <input type="text" class="form-control" placeholder="Your Answer" id="answer">
+                </div>
+                <button type="button" class="btn btn-primary col-sm-auto align-self-center" id="submit-answer">Submit</button>
+                <div class="w-100" ></div>
+                <p id="result" class="text-danger mt-2" style="padding-left: 15px;"> </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
